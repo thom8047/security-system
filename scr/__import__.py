@@ -7,10 +7,35 @@ from time import sleep as wait          # because I like lua
 
 
 class security:
-  def __init__:
-    lcd = LCD("PCF8574", 0x27, cols=16, rows=2)
-    input_button = zero.Button()    #config later  // For user input to enter keys
-    user_button = zero.Button()     #config later  // For disbaling alarm, 
-    alarm = zero.Buzzer()           #config later  // For the alarm, will work for now as an active buzzer
-    # possibly add led's for armed or not-armed, for cool colorful display and for whatever else.
+    def __init__(self):
+        self.lcd = LCD("PCF8574", 0x27, cols=16, rows=2)
+        self.input_button = zero.Button()    #config later  // For user input to enter keys
+        self.user_button = zero.Button()     #config later  // For disbaling alarm, 
+        self.alarm = zero.Buzzer()           #config later  // For the alarm, will work for now as an active buzzer
+        # possibly add led's for armed or not-armed, for cool colorful display and for whatever else.
+
+
+       
+    def enable(self):
+        pass    #meant for enabling the security-sys
+      
+    def disable(self):
+        pass    #meant for disabling the security-sys
+      
+    def checkForBreach(self):
+        pass    # checking for opened door, and or other stuff, such as gas
+      
+    def turnOnBeep(self):
+        pass    # turning on beeper
+      
+    def idleUserInput(self):
+        pass
     
+    def acceptUserInput(self):
+        pass
+      
+    def writeUserInput(self):
+        pass
+      
+    def answerUserInput(self):
+        pass
