@@ -6,34 +6,33 @@ from RPLCD.i2c import CharLCD as LCD  # for LCD to display text and info to user
 from time import sleep
 
 
-"""
-Initialize system
+class Button(zero.Button):
+    pass
 
-This singleton class will instantiate the security system object. For higher order
-use on the raspberry-pi, while the security system would still viably be active, this
-modularization is beneficial. Each sensor should have its own class to instantiate, to
-continue this OOP paradigm.
-
-Parameters
-__________
-None
-
-
-"""
-
+class Buzzer(zero.Buzzer):
+    pass
 
 class Security:
+    """
+    May move in the direction of instantiating a Flask back-end for access via a
+    front-end application (React, MUI5) and from that we'll be able to preform actions
+    on the raspberry pi via these commands
+    """
     def __init__(self):
+        # Add a note about where exactly the LCD connections on the Raspberry PI need to go
         self.lcd = LCD("PCF8574", 0x27, cols=16, rows=2)
-        self.input_button = (
-            zero.Button()
-        )  # config later  // For user input to enter keys
-        self.alarm = (
-            zero.Buzzer()
-        )  # config later  // For the alarm, will work for now as an active buzzer
-        # possibly add led's for armed or not-armed, for cool colorful display and for whatever else.
+        self.input_button = Button(26)
+        self.alarm = Buzzer(24)
 
     def wait(self, lapse: float) -> None:
+        """_summary_
+
+        Args:
+            lapse (float): _description_
+
+        Returns:
+            None
+        """
         return sleep(lapse)
 
     def enable(self):
