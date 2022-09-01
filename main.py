@@ -1,4 +1,3 @@
-"""Module Security provides the singleton object for security operations."""
 from src import Security
 
 
@@ -18,8 +17,6 @@ if __name__ == "__main__":
 
     def when_pressed():
         """in-scope method"""
-
-        # pylint: disable=no-member
         SECURITY_CLASS.toggle_backlight()
 
     SECURITY_CLASS.button.when_held = when_pressed
