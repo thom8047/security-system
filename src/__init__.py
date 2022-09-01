@@ -4,7 +4,8 @@
 
 from time import sleep
 
-# pylint: disable=import-error, missing-module-docstring
+# pylint: disable=import-error
+# pylint: disable=C0114
 from RPLCD.i2c import CharLCD as LCD
 import gpiozero as zero
 
