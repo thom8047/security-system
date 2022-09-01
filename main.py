@@ -1,13 +1,14 @@
-from src import Security
 import asyncio
+from src import Security
 
 
 async def main():
     """Main execution"""
-    SECURITY_CLASS = Security()
+    security = dict()
+    security.operation = Security()
 
     # Run various security methods asynchronously
-    asyncio.run(SECURITY_CLASS.handle_button())
+    asyncio.run(security.operation.handle_toggle_button_interaction())
 
 
 if __name__ == "__main__":
