@@ -1,4 +1,4 @@
-from .src import Security
+from src import Security
 
 if (__name__ == "__main__"):
     SECURITY_CLASS = Security()
