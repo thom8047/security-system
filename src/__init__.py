@@ -7,25 +7,36 @@ from time import sleep
 
 
 class Button(zero.Button):
+    """The `Button` class attached to the `gpiozero` package
+    """
     pass
 
 class Buzzer(zero.Buzzer):
     pass
 
 class Security:
-    """
-    May move in the direction of instantiating a Flask back-end for access via a
-    front-end application (React, MUI5) and from that we'll be able to preform actions
-    on the raspberry pi via these commands
+    """Security singleton class
+
+    Args:
+        None
+
+    Returns:
+        The `Security` object that has various public and private methods that take advantage of multiple Raspberry Pi libraries for use of Buttons, Buzzers, LCD Displays, etc. Please refer to the documents file for instruction and documentation on this classes capabilities.
+
+    Editor_Notes:
+        May move in the direction of instantiating a Flask back-end for access via a
+        front-end application (React, MUI5) and from that we'll be able to preform actions
+        on the raspberry pi via these commands
     """
     def __init__(self):
-        # Add a note about where exactly the LCD connections on the Raspberry PI need to go
+        # The LCD connections are listed on the LCD, 5v is the red,
         self.lcd = LCD("PCF8574", 0x27, cols=16, rows=2)
-        self.input_button = Button(26)
-        self.alarm = Buzzer(24)
+        self.lcd.backlight_enabled = False
+        self.button = Button(17)
+        # self.alarm = Buzzer(24)
 
-    def wait(self, lapse: float) -> None:
-        """_summary_
+    def wait(self, lapse):
+        """Method for synchronously waiting
 
         Args:
             lapse (float): _description_
@@ -41,20 +52,27 @@ class Security:
     def disable(self):
         pass  # meant for disabling the security-sys
 
-    def checkForBreach(self):
-        pass  # checking for opened door, and or other stuff, such as gas
+    def enableBacklight(self):
+        if (self.lcd):
+            self.lcd.backlight_enabled = True
 
-    def turnOnBeep(self):
-        pass  # turning on beeper
+    def disableBacklight(self):
+        if (self.lcd):
+            self.lcd.backlight_enabled = False
 
-    def idleUserInput(self):
-        pass
+    def toggleBacklight(self):
+        if (self.lcd):
+            self.lcd.backlight_enabled = not self.lcd.backlight_enabled
 
-    def acceptUserInput(self):
-        pass
+    def writeOutputToLCD(self, output):
+        """Write to the self.lcd
 
-    def writeUserInput(self):
-        pass
+        Args:
+            output (string): Output display
+        """
+        if (self.lcd):
+            self.lcd.write_string(output)
 
-    def answerUserInput(self):
-        pass
+    def clearLCDDisplay(self):
+        if (self.lcd):
+            self.lcd.clear()
