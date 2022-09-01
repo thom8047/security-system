@@ -8,6 +8,7 @@ from time import sleep
 # pylint: disable=import-error
 from RPLCD.i2c import CharLCD as LCD
 import gpiozero as zero
+import asyncio
 
 
 # class Button(zero.Button):
@@ -43,9 +44,10 @@ class Security:
         # The LCD connections are listed on the LCD, 5v is the red,
         self.lcd = LCD("PCF8574", 0x27, cols=16, rows=2)
         self.lcd.backlight_enabled = False
-        self.button = zero.Button(17)
-        self.button.hold_time = 3
-        # self.alarm = Buzzer(24)
+        self.toggle_lcd_button = zero.Button(17)
+        self.toggle_lcd_button.hold_time = 3
+
+        self.toggle_lcd_button.when_held = self.toggle_backlight()
 
     def wait(self, lapse):
         """Method for synchronously waiting
@@ -58,11 +60,15 @@ class Security:
         """
         return sleep(lapse)
 
-    # def enable(self):
-    #     pass  # meant for enabling the security-sys
+    async def handle_button(self):
+        """Handles when the button is pressed"""
+        self.toggle_lcd_button.wait_for_press()
+        print("pressed")
+        self.toggle_lcd_button.wait_for_release()
+        print("done")
 
-    # def disable(self):
-    #     pass  # meant for disabling the security-sys
+        # Repeat
+        self.handle_button()
 
     def enable_backlight(self):
         """__summary__"""

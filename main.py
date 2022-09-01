@@ -1,23 +1,14 @@
 from src import Security
+import asyncio
 
 
-def handle_button(button):
-    """Handles when the button is pressed"""
-    button.wait_for_press()
-    print("pressed")
-    button.wait_for_release()
-    print("done")
+async def main():
+    """Main execution"""
+    SECURITY_CLASS = Security()
 
-    # Repeat
-    handle_button(button)
+    # Run various security methods asynchronously
+    asyncio.run(SECURITY_CLASS.handle_button())
 
 
 if __name__ == "__main__":
-    SECURITY_CLASS = Security()
-
-    def when_pressed():
-        """in-scope method"""
-        SECURITY_CLASS.toggle_backlight()
-
-    SECURITY_CLASS.button.when_held = when_pressed
-    handle_button(SECURITY_CLASS.button)
+    asyncio.run(main())
