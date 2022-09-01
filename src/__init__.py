@@ -33,6 +33,7 @@ class Security:
         self.lcd = LCD("PCF8574", 0x27, cols=16, rows=2)
         self.lcd.backlight_enabled = False
         self.button = Button(17)
+        self.button.hold_time = 3
         # self.alarm = Buzzer(24)
 
     def wait(self, lapse):
