@@ -4,7 +4,7 @@ from src import Security
 
 async def main():
     """Main execution"""
-    security = dict()
+    security = {}
     security.operation = Security()
 
     # Run various security methods asynchronously
