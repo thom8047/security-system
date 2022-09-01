@@ -1,12 +1,10 @@
 # import RPIO.GPIO as gpio  # just incase I want to do it with the RPi.GPIO package
-
-
 # import smtplib  # for connecting to gmail to send email and text
 # from email.mime.text import MIMEText  # for creating an email format
 
 from time import sleep
 
-# pylint: disable=import-error
+# pylint: disable=import-error, missing-module-docstring
 from RPLCD.i2c import CharLCD as LCD
 import gpiozero as zero
 
