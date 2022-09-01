@@ -2,6 +2,7 @@
 # import smtplib  # for connecting to gmail to send email and text
 # from email.mime.text import MIMEText  # for creating an email format
 
+"""Using time for waiting"""
 from time import sleep
 
 # pylint: disable=import-error
