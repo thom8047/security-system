@@ -16,11 +16,13 @@ async def main():
         [hour, minute, suffix] = [
             datetime.datetime.now().hour,
             datetime.datetime.now().minute,
-            "PM" if datetime.datetime.now().hour > 11 else "AM",
+            "PM"
+            if datetime.datetime.now().hour > 11 or datetime.datetime.now().hour == 0
+            else "AM",
         ]
         security.clear_lcd_display()
         security.write_output_to_lcd(
-            f"Date: {datetime.date.today()}Time: {hour -12 if hour > 12 else hour}:{minute} {suffix}"
+            f"Date: {datetime.date.today()}Time: {12 if hour == 0 else hour - 12 if hour > 12 else hour}:{minute} {suffix}"
         )
         await multiple_writing(i + 1)
 
