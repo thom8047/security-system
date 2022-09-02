@@ -1,4 +1,5 @@
 import asyncio
+import datetime
 from src import Security
 
 
@@ -12,13 +13,13 @@ async def main():
             i (int): number
         """
         await asyncio.sleep(1)
-        security.write_output_to_lcd(f"waited {i} seconds")
+        security.clear_lcd_display()
+        security.write_output_to_lcd(f"Date: {datetime.date.today()}")
         await multiple_writing(i + 1)
 
     # Run various security methods asynchronously
     await asyncio.gather(
         multiple_writing(0),
-        # security.handle_toggle_button_interaction(),
     )
 
 

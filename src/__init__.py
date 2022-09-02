@@ -44,6 +44,7 @@ class Security:
 
         self.toggle_lcd_button = zero.Button(17)
         self.toggle_lcd_button.hold_time = 3
+        # This will automatically run as long as the python script is executing
         self.toggle_lcd_button.when_held = self.toggle_backlight
 
     def wait(self, lapse):
@@ -56,16 +57,6 @@ class Security:
             None
         """
         return sleep(lapse)
-
-    async def handle_toggle_button_interaction(self):
-        """Handles when the button is pressed"""
-        self.toggle_lcd_button.wait_for_press()
-        print("pressed")
-        self.toggle_lcd_button.wait_for_release()
-        print("done")
-
-        # Repeat
-        await self.handle_toggle_button_interaction()
 
     def enable_backlight(self):
         """__summary__"""
