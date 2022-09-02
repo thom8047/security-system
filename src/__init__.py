@@ -40,7 +40,7 @@ class Security:
     def __init__(self):
         # The LCD connections are listed on the LCD, 5v is the red,
         self.lcd = LCD("PCF8574", 0x27, cols=16, rows=2)
-        self.lcd.backlight_enabled = False
+        self.lcd.backlight_enabled = True
 
         self.toggle_lcd_button = zero.Button(17)
         self.toggle_lcd_button.hold_time = 3
