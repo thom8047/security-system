@@ -12,9 +12,16 @@ async def main():
         Args:
             i (int): number
         """
-        await asyncio.sleep(1)
+        await asyncio.sleep(30)
+        [hour, minute, suffix] = [
+            datetime.datetime.now().hour,
+            datetime.datetime.now().minute,
+            "PM" if datetime.datetime.now().hour > 11 else "AM",
+        ]
         security.clear_lcd_display()
-        security.write_output_to_lcd(f"Date: {datetime.date.today()}")
+        security.write_output_to_lcd(
+            f"Date: {datetime.date.today()}Time: {hour -12 if hour > 12 else hour}:{minute} {suffix}"
+        )
         await multiple_writing(i + 1)
 
     # Run various security methods asynchronously
