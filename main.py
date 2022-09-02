@@ -7,7 +7,7 @@ async def main():
     security = Security()
 
     # Run various security methods asynchronously
-    asyncio.gather(security.handle_toggle_button_interaction())
+    await asyncio.gather(security.handle_toggle_button_interaction())
 
 
 if __name__ == "__main__":
