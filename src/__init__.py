@@ -65,8 +65,7 @@ class Security:
         print("done")
 
         # Repeat
-        await asyncio.sleep(0)
-        self.handle_toggle_button_interaction()
+        await self.handle_toggle_button_interaction()
 
     def enable_backlight(self):
         """__summary__"""
