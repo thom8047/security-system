@@ -16,9 +16,7 @@ async def main():
         [hour, minute, suffix] = [
             datetime.datetime.now().hour,
             datetime.datetime.now().minute,
-            "PM"
-            if datetime.datetime.now().hour > 11 or datetime.datetime.now().hour == 0
-            else "AM",
+            "PM" if datetime.datetime.now().hour > 11 else "AM",
         ]
         security.clear_lcd_display()
         security.write_output_to_lcd(
