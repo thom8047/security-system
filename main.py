@@ -1,19 +1,23 @@
 from src import Security
 
-def handleButton(button):
+
+def handle_button(button):
+    """Handles when the button is pressed"""
     button.wait_for_press()
     print("pressed")
     button.wait_for_release()
     print("done")
 
     # Repeat
-    handleButton(button)
+    handle_button(button)
 
-if (__name__ == "__main__"):
+
+if __name__ == "__main__":
     SECURITY_CLASS = Security()
-    def whenPressed():
-        SECURITY_CLASS.toggleBacklight()
-    SECURITY_CLASS.button.when_held = whenPressed
-    handleButton(SECURITY_CLASS.button)
 
+    def when_pressed():
+        """in-scope method"""
+        SECURITY_CLASS.toggle_backlight()
 
+    SECURITY_CLASS.button.when_held = when_pressed
+    handle_button(SECURITY_CLASS.button)
