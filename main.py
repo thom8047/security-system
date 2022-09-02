@@ -17,8 +17,8 @@ async def main():
 
     # Run various security methods asynchronously
     await asyncio.gather(
+        security.handle_toggle_button_interaction(),
         multiple_writing(0),
-        # security.handle_toggle_button_interaction(),
     )
 
 
