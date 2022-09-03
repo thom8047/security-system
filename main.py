@@ -15,7 +15,7 @@ async def main():
         await asyncio.sleep(30)
         [hour, minute, suffix] = [
             datetime.datetime.now().hour,
-            datetime.datetime.now().minute,
+            "{:02d}".format(datetime.datetime.now().minute),
             "PM" if datetime.datetime.now().hour > 11 else "AM",
         ]
         security.clear_lcd_display()
