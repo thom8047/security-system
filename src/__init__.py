@@ -76,6 +76,7 @@ class Security:
     def toggle_backlight(self):
         """Toggles the backlight"""
         if self.lcd:
+            self.toggle_lcd_button.when_pressed = self.undefined
             self.lcd.backlight_enabled = not self.lcd.backlight_enabled
 
     def write_output_to_lcd(self, output):
@@ -91,3 +92,14 @@ class Security:
         """__summary__"""
         if self.lcd:
             self.lcd.clear()
+
+    def undefined(self):
+        """Undefined method
+
+        Editor_Notes:
+            Some of the `gpiozero` methods need to be set to None when no functionality
+            is needed, and when other functionality prompts, they need action. This member
+            will return none, so we can unify the type of `undefined` for methods and
+            other attributes.
+        """
+        return None
