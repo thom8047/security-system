@@ -46,6 +46,7 @@ class Security:
         self.toggle_lcd_button.hold_time = 3
         # This will automatically run as long as the python script is executing
         self.toggle_lcd_button.when_held = self.toggle_backlight
+        self.toggle_lcd_button.when_pressed = print("pressed")
 
     def wait(self, lapse):
         """Method for synchronously waiting
