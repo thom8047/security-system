@@ -2,10 +2,8 @@
 # import smtplib  # for connecting to gmail to send email and text
 # from email.mime.text import MIMEText  # for creating an email format
 
-"""Using time for waiting"""
 from time import sleep
-
-# pylint: disable=import-error
+import asyncio
 from RPLCD.i2c import CharLCD as LCD
 import gpiozero as zero
 
@@ -42,10 +40,12 @@ class Security:
     def __init__(self):
         # The LCD connections are listed on the LCD, 5v is the red,
         self.lcd = LCD("PCF8574", 0x27, cols=16, rows=2)
-        self.lcd.backlight_enabled = False
-        self.button = zero.Button(17)
-        self.button.hold_time = 3
-        # self.alarm = Buzzer(24)
+        self.lcd.backlight_enabled = True
+
+        self.toggle_lcd_button = zero.Button(17)
+        self.toggle_lcd_button.hold_time = 3
+        # This will automatically run as long as the python script is executing
+        self.toggle_lcd_button.when_held = self.toggle_backlight
 
     def wait(self, lapse):
         """Method for synchronously waiting
@@ -57,12 +57,6 @@ class Security:
             None
         """
         return sleep(lapse)
-
-    # def enable(self):
-    #     pass  # meant for enabling the security-sys
-
-    # def disable(self):
-    #     pass  # meant for disabling the security-sys
 
     def enable_backlight(self):
         """__summary__"""

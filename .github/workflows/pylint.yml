@@ -23,6 +23,7 @@ jobs:
       - name: Analysing the code with pylint
         # The disable tag will disable:
         # - Needing a doc-string to explain imports
+        # - Having lines too long (longer than 100 characters, sometimes it cannot be helped)
         # - Needing objects to explicitly have members (the error was being thrown even though the object had the method attached)
         run: |
-          pylint --disable=C0114,E1101 $(git ls-files '*.py')
+          pylint --disable=C0114,C0301,E1101 $(git ls-files '*.py')
