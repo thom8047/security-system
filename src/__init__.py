@@ -8,23 +8,11 @@ from RPLCD.i2c import CharLCD as LCD
 import gpiozero as zero
 
 
-# class Button(zero.Button):
-#     """The `Button` class attached to the `gpiozero` package"""
-
-#     pass
-
-
-# class Buzzer(zero.Buzzer):
-#     """The `Buzzer class attached to the `gpiozero` package"""
-
-#     pass
-
-
 class Security:
     """Security singleton class
 
     Args:
-        None
+        defaultLcdButtonPin (int): The GPIO pin number representing the button
 
     Returns:
         The `Security` object that has various public and private methods that take advantage
@@ -37,16 +25,35 @@ class Security:
         on the raspberry pi via these commands
     """
 
-    def __init__(self):
+    def __init__(self, defaultLcdButtonPin=17):
+
         # The LCD connections are listed on the LCD, 5v is the red,
         self.lcd = LCD("PCF8574", 0x27, cols=16, rows=2)
         self.lcd.backlight_enabled = True
 
-        self.toggle_lcd_button = zero.Button(17)
+        # The LCD button pin number
+        self.toggle_lcd_button = zero.Button(defaultLcdButtonPin)
         self.toggle_lcd_button.hold_time = 3
         # This will automatically run as long as the python script is executing
-        self.toggle_lcd_button.when_held = self.toggle_backlight
-        self.toggle_lcd_button.when_pressed = self.test
+        self.toggle_lcd_button.when_held = self.enable_backlight
+        # Starts as null
+        self.toggle_lcd_button.when_released = self.click_menu_option
+
+        # Set up the menu
+        self.menu = {
+            "menu": {
+                "System settings": {
+                    "Enable system": self.undefined,
+                    "Disable system": self.undefined,
+                },
+                "Turn screen OFF": self.disable_backlight,
+            },
+            "selected": {
+                # "item": None,
+                "position": 0
+            },
+            "parent": {},
+        }
 
     def wait(self, lapse):
         """Method for synchronously waiting
@@ -76,7 +83,6 @@ class Security:
     def toggle_backlight(self):
         """Toggles the backlight"""
         if self.lcd:
-            self.toggle_lcd_button.when_pressed = self.undefined
             self.lcd.backlight_enabled = not self.lcd.backlight_enabled
 
     def write_output_to_lcd(self, output):
@@ -92,6 +98,39 @@ class Security:
         """__summary__"""
         if self.lcd:
             self.lcd.clear()
+
+    def hold_selected_menu_option(self):
+        """Wrapper function to perform menu option action(s)
+
+        Args:
+            action (function): The action needing to be performed
+        """
+        if self.lcd.backlight_enabled:
+            position = self.menu["selected"]["position"]
+            selectedKey = list(self.menu["parent"])[position]
+            if type(self.menu["parent"][selectedKey]) == type(dict()):
+                # dive in
+                self.menu["parent"] = self.menu["parent"][selectedKey]
+                self.menu["selected"] = {
+                    # "item": list(self.menu["parent"])[0],
+                    "position": 0,
+                }
+            else:
+                # preform action
+                self.menu["parent"][selectedKey]()
+
+    def click_menu_option(self):
+        if self.lcd.backlight_enabled:
+            parentOptions = list(self.menu["parent"])
+            currentPosition = self.menu["selected"]["position"]
+
+            if len(parentOptions) == currentPosition:
+                # were at our last option
+                self.menu["selected"]["position"] = 0
+                return
+
+            self.menu["selected"]["position"] = currentPosition + 1
+            return
 
     def undefined(self):
         """Undefined method
