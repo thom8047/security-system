@@ -12,7 +12,7 @@ class Security:
     """Security singleton class
 
     Args:
-        defaultLcdButtonPin (int): The GPIO pin number representing the button
+        default_lcd_button_pin (int): The GPIO pin number representing the button
 
     Returns:
         The `Security` object that has various public and private methods that take advantage
@@ -25,14 +25,14 @@ class Security:
         on the raspberry pi via these commands
     """
 
-    def __init__(self, defaultLcdButtonPin=17):
+    def __init__(self, default_lcd_button_pin=17):
 
         # The LCD connections are listed on the LCD, 5v is the red,
         self.lcd = LCD("PCF8574", 0x27, cols=16, rows=2)
         self.lcd.backlight_enabled = True
 
         # The LCD button pin number
-        self.toggle_lcd_button = zero.Button(defaultLcdButtonPin)
+        self.toggle_lcd_button = zero.Button(default_lcd_button_pin)
         self.toggle_lcd_button.hold_time = 3
         # This will automatically run as long as the python script is executing
         self.toggle_lcd_button.when_held = self.enable_backlight
@@ -108,7 +108,7 @@ class Security:
         if self.lcd.backlight_enabled:
             position = self.menu["selected"]["position"]
             selected_key = list(self.menu["parent"])[position]
-            if type(self.menu["parent"][selected_key]) == type({}):
+            if isinstance(self.menu["parent"][selected_key], dict):
                 # dive in
                 self.menu["parent"] = self.menu["parent"][selected_key]
                 self.menu["selected"] = {
