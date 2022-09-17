@@ -107,29 +107,34 @@ class Security:
         """
         if self.lcd.backlight_enabled:
             position = self.menu["selected"]["position"]
-            selectedKey = list(self.menu["parent"])[position]
-            if type(self.menu["parent"][selectedKey]) == type(dict()):
+            selected_key = list(self.menu["parent"])[position]
+            if type(self.menu["parent"][selected_key]) == type({}):
                 # dive in
-                self.menu["parent"] = self.menu["parent"][selectedKey]
+                self.menu["parent"] = self.menu["parent"][selected_key]
                 self.menu["selected"] = {
                     # "item": list(self.menu["parent"])[0],
                     "position": 0,
                 }
             else:
                 # preform action
-                self.menu["parent"][selectedKey]()
+                self.menu["parent"][selected_key]()
 
     def click_menu_option(self):
-        if self.lcd.backlight_enabled:
-            parentOptions = list(self.menu["parent"])
-            currentPosition = self.menu["selected"]["position"]
+        """Wrapper function to cycle through menu option action(s)
 
-            if len(parentOptions) == currentPosition:
+        Args:
+            None
+        """
+        if self.lcd.backlight_enabled:
+            parent_options = list(self.menu["parent"])
+            current_position = self.menu["selected"]["position"]
+
+            if len(parent_options) == current_position:
                 # were at our last option
                 self.menu["selected"]["position"] = 0
                 return
 
-            self.menu["selected"]["position"] = currentPosition + 1
+            self.menu["selected"]["position"] = current_position + 1
             return
 
     def undefined(self):
