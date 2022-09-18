@@ -1,3 +1,6 @@
+# pylint: skip-file
+
+
 class Map(dict):
     """
     Mapper for common syntax use of dictionaries
