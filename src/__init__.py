@@ -2,11 +2,10 @@
 # import smtplib  # for connecting to gmail to send email and text
 # from email.mime.text import MIMEText  # for creating an email format
 # import asyncio
-
-from RPLCD.i2c import CharLCD as LCD
-from src.Map import Map
 from time import sleep
+from RPLCD.i2c import CharLCD as LCD
 import gpiozero as zero
+from src.Map import Map
 
 
 class Security:
