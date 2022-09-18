@@ -1,10 +1,11 @@
 # import RPIO.GPIO as gpio  # just incase I want to do it with the RPi.GPIO package
 # import smtplib  # for connecting to gmail to send email and text
 # from email.mime.text import MIMEText  # for creating an email format
+# import asyncio
 
-from time import sleep
-import asyncio
 from RPLCD.i2c import CharLCD as LCD
+from src.Map import Map
+from time import sleep
 import gpiozero as zero
 
 
@@ -32,28 +33,30 @@ class Security:
         self.lcd.backlight_enabled = True
 
         # The LCD button pin number
-        self.toggle_lcd_button = zero.Button(default_lcd_button_pin)
-        self.toggle_lcd_button.hold_time = 3
+        self.lcd_button = zero.Button(default_lcd_button_pin)
+        self.lcd_button.hold_time = 3
         # This will automatically run as long as the python script is executing
-        self.toggle_lcd_button.when_held = self.enable_backlight
+        self.lcd_button.when_held = self.enable_backlight
         # Starts as null
-        self.toggle_lcd_button.when_released = self.click_menu_option
+        self.lcd_button.when_released = self.click_menu_option
 
         # Set up the menu
-        self.menu = {
-            "menu": {
-                "System settings": {
-                    "Enable system": self.undefined,
-                    "Disable system": self.undefined,
+        self.menu = Map(
+            {
+                "menu": {
+                    "System settings": {
+                        "Enable system": self.undefined,
+                        "Disable system": self.undefined,
+                    },
+                    "Turn screen OFF": self.disable_backlight,
                 },
-                "Turn screen OFF": self.disable_backlight,
-            },
-            "selected": {
-                # "item": None,
-                "position": 0
-            },
-            "parent": {},
-        }
+                "selected": {
+                    # "item": None,
+                    "position": 0
+                },
+                "parent": {},
+            }
+        )
 
     def wait(self, lapse):
         """Method for synchronously waiting
@@ -74,11 +77,13 @@ class Security:
         """__summary__"""
         if self.lcd:
             self.lcd.backlight_enabled = True
+            self.lcd_button.when_held = self.hold_selected_menu_option
 
     def disable_backlight(self):
         """__summary__"""
         if self.lcd:
             self.lcd.backlight_enabled = False
+            self.lcd_button.when_held = self.enable_backlight
 
     def toggle_backlight(self):
         """Toggles the backlight"""
@@ -106,18 +111,18 @@ class Security:
             action (function): The action needing to be performed
         """
         if self.lcd.backlight_enabled:
-            position = self.menu["selected"]["position"]
-            selected_key = list(self.menu["parent"])[position]
-            if isinstance(self.menu["parent"][selected_key], dict):
+            position = self.menu.selected.position
+            selected_key = list(self.menu.parent)[position]
+            if isinstance(self.menu.parent[selected_key], dict):
                 # dive in
-                self.menu["parent"] = self.menu["parent"][selected_key]
-                self.menu["selected"] = {
-                    # "item": list(self.menu["parent"])[0],
+                self.menu.parent = self.menu.parent[selected_key]
+                self.menu.selected = {
+                    # "item": list(self.menu.parent)[0],
                     "position": 0,
                 }
             else:
                 # preform action
-                self.menu["parent"][selected_key]()
+                self.menu.parent[selected_key]()
 
     def click_menu_option(self):
         """Wrapper function to cycle through menu option action(s)
@@ -126,15 +131,15 @@ class Security:
             None
         """
         if self.lcd.backlight_enabled:
-            parent_options = list(self.menu["parent"])
-            current_position = self.menu["selected"]["position"]
+            parent_options = list(self.menu.parent)
+            current_position = self.menu.selected.position
 
             if len(parent_options) == current_position:
                 # were at our last option
-                self.menu["selected"]["position"] = 0
+                self.menu.selected.position = 0
                 return
 
-            self.menu["selected"]["position"] = current_position + 1
+            self.menu.selected.position = current_position + 1
             return
 
     def undefined(self):
